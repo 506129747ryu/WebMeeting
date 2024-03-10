@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Meeting App</title>
+    <style>
+        /* CSS styling for the app */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #localVideo, #remoteVideo, #sharedSlide {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+        #videoContainer {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="videoContainer">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+    </div>
+    <div id="controls">
+        <button onclick="startMeeting()">Start Meeting</button>
+        <button onclick="endMeeting()">End Meeting</button>
+        <button onclick="shareScreen()">Share Screen</button>
+    </div>
+    <div>
+        <img id="sharedSlide" style="display: none;" src="" alt="Shared Slide">
+    </div>
+
+    <script>
+        // JavaScript code for WebRTC functionality
+        let localStream;
+        let remoteStream;
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const sharedSlide = document.getElementById('sharedSlide');
+
+        async function startMeeting() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+
+                // Code for signaling server setup (not included in this example)
+
+                // Code for establishing peer connection and handling remote stream (not included in this example)
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+            }
+        }
+
+        function endMeeting() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localVideo.srcObject = null;
+            }
+            if (remoteStream) {
+                remoteStream.getTracks().forEach(track => track.stop());
+                remoteVideo.srcObject = null;
+            }
+
+            // Code for closing peer connection and signaling (not included in this example)
+        }
+
+        async function shareScreen() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                localVideo.srcObject = stream;
+                localStream = stream;
+
+                // Code for signaling server setup (not included in this example)
+
+                // Code for sharing screen stream with other participants (not included in this example)
+            } catch (error) {
+                console.error('Error accessing screen sharing:', error);
+            }
+        }
+    </script>
+</body>
+</html>
